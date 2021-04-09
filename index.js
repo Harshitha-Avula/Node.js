@@ -1,35 +1,58 @@
-var express = require('express')
-var app = express()
+const express = require('express')
+const methods = require('./method')
 
-var sequelize = require('./database')
-var employee = require('./employee')
+const app = express()
 app.use(express.json())
 
-sequelize.sync().then(() => console.log('db is ready'));
+module.exports.getUsers = async() => {
+    const user = await methods.getUsers()
+    return formatResponse(200,user)
+}
 
-app.get('/', async function(req,res){
-    const emp = await employee.findAll()
-    res.send(emp)
-})
+module.exports.getUserbyName = async(event) => {
+    const user = await methods.getUserbyName(event.body.name)
+    return formatResponse(200,user)
+}
 
-app.post('/create', async function(req,res){
-    await employee.create(req.body)
-    res.send("employee added")
-})
+module.exports.userLogin = async(event) => {
+    const body = JSON.parse(event.body)
+    const response = await methods.userLogin(body.password,body.name)
+    return formatResponse(200,response)
+}
 
-app.put('/add', async function(req,res){
-    var newname = req.body.newname
-    var newphone = req.body.newphone
-    var emp = await employee.findOne({where:{name:newname}})
-    emp.phone = req.body.newphone
-    await emp.save()
-    res.send(emp)
-})
+module.exports.addUser = async(event) => {
+    console.log(event.headers.authorization)
+    const bearer = event.headers.authorization.split(' ')
+    const bearerToken = bearer[1]
+    event.headers.authorization = bearerToken
+    const body = JSON.parse(event.body)
+    const response = await methods.userLogin(body.username,body.password,body.role,event.headers.authorization)
+    return formatResponse(200,response)
+}
 
-app.delete('/delete', async function(req,res){
-    var newname1 = req.body.newname1
-    employee.destroy({where: {name:newname1}})
-    res.send("employee deleted")
-})
+module.exports.deleteUser = async (event) => {
+    const bearer=event.headers.Authorization.split(' ');
+    const bearerToken= bearer[1];
+    event.headers.Authorization=bearerToken;
+    console.log(event.headers.Authorization)
+    const response= await methods.deleteUser(event.pathParameters.id,event.headers.Authorization);
+    return formatResponse(200,response)
+  
+}
 
-app.listen(3005,() => console.log("server running on port 3005"))
+const formatResponse = function(statusCode, body) {
+    const response = {
+        statusCode: statusCode,
+        headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json"
+        },
+        isBase64Encoded: false,
+        body: JSON.stringify(body)
+    };
+    return response;
+};
+
+app.listen(3000, () => {
+    console.log("App is running");
+});

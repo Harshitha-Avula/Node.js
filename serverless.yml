@@ -1,0 +1,61 @@
+service: projectServerless
+frameworkVersion: '2'
+
+package:
+  exclude:
+    - lib/**
+    - data-local
+    - node_modeules
+  include:
+    - dist
+
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+
+
+functions:
+  index: index.getUsers
+  events:
+    - http:
+      path: '/users'
+      method: get
+
+handler: index.getUserbyName
+events:
+  - http:
+    path: '/users/name'
+    method: get
+    request:
+      parameters:
+        paths:
+        username: true
+
+handler: index.userLogin
+events:
+  - http:
+    path: '/login'
+    method: post
+
+handler: index.addUser
+  events:
+    - http:
+      path: '/adduser'
+      method: post
+      authorizer: verifyToken
+
+handler: index.deleteUser
+  events:
+    - http:
+      path: '/users/{id}'
+      method: delete
+      authorizer: verifyToken
+      request:
+        parameters:
+          paths:
+            id: true
+
+verifyToken:
+  handler: index.verifyToken
+          
