@@ -16,46 +16,48 @@ provider:
 
 
 functions:
-  index: index.getUsers
-  events:
-    - http:
-      path: '/users'
-      method: get
+  create:
+    handler: index.getUsers
+    events:
+      - http:
+          path: '/users'
+          method: post
+          cors: true
+  get:
+    handler: index.getUserbyName
+    events:
+      - http:
+          path: '/users/name'
+          method: get
+          request:
+            parameters:
+              paths:
+              username: true
+  post:
+    handler: index.userLogin
+    events:
+      - http:
+          path: '/login'
+          method: post
+  update:
+    handler: index.addUser
+    events:
+      - http:
+          path: '/adduser'
+          method: post
+          # authorizer: verifyToken
+  delete:
+    handler: index.deleteUser
+    events:
+      - http:
+          path: '/users/{id}'
+          method: delete
+          # authorizer: verifyToken
+          request:
+            parameters:
+              paths:
+              id: true
 
-handler: index.getUserbyName
-events:
-  - http:
-    path: '/users/name'
-    method: get
-    request:
-      parameters:
-        paths:
-        username: true
-
-handler: index.userLogin
-events:
-  - http:
-    path: '/login'
-    method: post
-
-handler: index.addUser
-  events:
-    - http:
-      path: '/adduser'
-      method: post
-      authorizer: verifyToken
-
-handler: index.deleteUser
-  events:
-    - http:
-      path: '/users/{id}'
-      method: delete
-      authorizer: verifyToken
-      request:
-        parameters:
-          paths:
-            id: true
-
-verifyToken:
-  handler: index.verifyToken
+# verifyToken:
+#   handler: index.verifyToken
           
