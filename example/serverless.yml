@@ -1,0 +1,42 @@
+service: projectServerless
+
+
+package:
+  exclude:
+    - lib/**
+    - data-local
+    - node_modeules
+  include:
+    - dist
+
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+
+plugins:
+  - serverless-offline
+
+functions:
+  gets:
+    handler: index.getAllproducts
+    events:
+      - http:
+          path: /products
+          method: get
+          cors: true
+    
+  create:
+    handler: index.createProduct
+    events:
+      - http:
+          path: /createproduct
+          method: post
+          cors: true
+  get:
+    handler: index.getProductbyId
+    events:
+      - http:
+          path: /{productId}
+          method: get
+          
