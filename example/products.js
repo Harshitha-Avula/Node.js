@@ -1,22 +1,21 @@
 const { Model, DataTypes }= require('sequelize');
-const sequelize=require('./database.js');
+const sequelize=require('./database');
  
  class products extends Model {}
  
  products.init({
-    name: {
+     name: {
+         type: DataTypes.STRING
+     },
+     type:{
         type: DataTypes.STRING
      },
-    type:{
+     cost:{
         type: DataTypes.STRING
      },
-    cost:{
-        type: DataTypes.NUMBER
-     }
-     
  },{
-    sequelize,
-    modelName: "products"
+     sequelize,
+     modelName: "products"
  });
  
- module.exports = products;
+ module.exports=products;

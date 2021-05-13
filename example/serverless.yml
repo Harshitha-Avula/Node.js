@@ -1,13 +1,13 @@
 service: projectServerless
 
 
-package:
-  exclude:
-    - lib/**
-    - data-local
-    - node_modeules
-  include:
-    - dist
+# package:
+#   exclude:
+#     - lib/**
+#     - data-local
+#     - node_modeules
+#   include:
+#     - dist
 
 
 provider:
@@ -18,11 +18,11 @@ plugins:
   - serverless-offline
 
 functions:
-  gets:
+  getAllproducts:
     handler: index.getAllproducts
     events:
       - http:
-          path: /products
+          path: products
           method: get
           cors: true
     
@@ -30,13 +30,13 @@ functions:
     handler: index.createProduct
     events:
       - http:
-          path: /createproduct
+          path: '/createproduct'
           method: post
           cors: true
   get:
-    handler: index.getProductbyId
+    handler: index.getProductbyName
     events:
       - http:
-          path: /{productId}
+          path: '/{productName}'
           method: get
           
