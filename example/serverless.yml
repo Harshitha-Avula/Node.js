@@ -40,3 +40,10 @@ functions:
           path: '/{productName}'
           method: get
           
+  delete:
+    handler: index.deleteProduct
+    events:
+      - http:
+          path: '/{id}'
+          method: delete
+          

@@ -16,11 +16,12 @@ async getAllProduct()  {
 async createProduct (product) {
   console.log('products inserted')
   console.log(product)
-  let result = await Product.create(product);
-  console.log(result)
+  const body = JSON.parse(product)
+  let result = await Product.create(body);
+  // console.log(result)
   if(result) {
     return {
-      data: product,
+      data: body,
       message: "Product successfully created!"
     };
   }
@@ -34,4 +35,9 @@ async getProductByName(name)  {
   if(product) return product;
   return "Error fetching product from db";
 },
+
+async deleteProduct(id) {
+  const product  = await Product.destroy({where: {id:id}})
+  return "product deleted"
+}
 };

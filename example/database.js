@@ -1,15 +1,14 @@
-const {​​​​​​​Sequelize} ​​​​​​​​ = require('sequelize');
-const sequelize = new Sequelize('productdetails','username','password',{​​​​​​​​
-    dialect:'sqlite',
-    host:'./dev.sqlite'
-}​​​​​​​​);
-sequelize
-    .authenticate()
-    .then(() => {​​​​​​​​
-console.log('Connection has been established successfully');
-    }​​​​​​​​)
-    .catch((err) => {​​​​​​​​
-console.error('Unable to connect to the database:', err);
-    }​​​​​​​​);
+const { Sequelize } = require('sequelize');
+const sequelize= new Sequelize('userdetails','username','password',{
+    dialect: 'sqlite',
+    host: './dev.sqlite'
+});
+// sequelize
+//     .authenticate()
+//     .then(() => {​​​​​​​​
+//         console.log('Connection has been established successfully');
+//     }​​​​​​​​)
+//     .catch((err) => {​​​​​​​​
+//         console.error('Unable to connect to the database:', err);
+//     }​​​​​​​​);
 module.exports = sequelize;
-
